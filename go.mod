@@ -1,4 +1,4 @@
-module github.com/Yandex-Practicum/tracker
+module Fitness-Tracker-Module
 
 go 1.24.1
 
