@@ -24,9 +24,13 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 		return 0, "", 0, fmt.Errorf("неверное количество данных: ожидается 3, получено %d", len(input))
 	}
 
-	steps, err := strconv.Atoi(input[0])
+	if strings.TrimSpace(input[0]) == "" {
+		return 0, "", 0, fmt.Errorf("первое значение (количество шагов) пусто")
+	}
+
+	steps, err := strconv.Atoi(string(input[0]))
 	if err != nil {
-		return 0, " ", 0, fmt.Errorf("не удалось преобразовать количество шагов: %v", err)
+		return 0, "", 0, fmt.Errorf("не удалось преобразовать количество шагов: %v", err)
 	}
 
 	activity := strings.TrimSpace(input[1])
@@ -87,7 +91,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 	return fmt.Sprintf(
 		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f",
 		trainings,
-		duration.Hours(),
+		duration.Minutes(),
 		dist,
 		avgSpeed,
 		calories,

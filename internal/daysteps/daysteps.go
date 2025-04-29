@@ -24,7 +24,7 @@ func parsePackage(data string) (int, time.Duration, error) {
 	if strings.TrimSpace(input[0]) == "" {
 		return 0, 0, fmt.Errorf("первое значение (количество шагов) пусто")
 	}
-	steps, err := strconv.Atoi(input[0])
+	steps, err := strconv.Atoi(string(input[0]))
 	if err != nil {
 		return 0, 0, fmt.Errorf("не удалось преобразовать '%s' в число: %v", input, err)
 	}
