@@ -3,6 +3,7 @@ package daysteps
 import (
 	"Fitness-Tracker-Module/internal/spentcalories"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -18,7 +19,7 @@ const (
 func parsePackage(data string) (int, time.Duration, error) {
 	input := strings.Split(data, ",")
 
-	if len(input) > 2 {
+	if len(input) != 2 {
 		return 0, 0, fmt.Errorf("неверное количество данных: ожидается 2, получено %d", len(input))
 	}
 	if strings.TrimSpace(input[0]) == "" {
@@ -37,7 +38,9 @@ func parsePackage(data string) (int, time.Duration, error) {
 	if err != nil {
 		return 0, 0, fmt.Errorf("ошибка преобразования времени: %v", err)
 	}
-
+	if duration <= 0 {
+		return 0, 0, fmt.Errorf("ошибка продолжительности: продолжительность не может быть равна нулю")
+	}
 	return steps, duration, nil
 }
 
@@ -45,16 +48,17 @@ func DayActionInfo(data string, weight, height float64) string {
 	fmt.Println("Входные данные:", data)
 
 	if strings.TrimSpace(data) == "" {
-		fmt.Println("Ошибка: входные данные пусты")
+		log.Println("Ошибка: входные данные пусты")
 		return ""
 	}
 
 	steps, duration, err := parsePackage(data)
 	if err != nil {
-		fmt.Println("Ошибка: получение функции ", err)
+		log.Println("Ошибка: получение функции ", err)
 		return ""
 	}
 	if steps <= 0 {
+		log.Println("steps is less or equal to zero:", steps)
 		return ""
 	}
 
@@ -66,7 +70,7 @@ func DayActionInfo(data string, weight, height float64) string {
 		return ""
 	}
 	info := fmt.Sprintf(
-		"Количество шагов: %d\nДистанция составила: %.2f км\nВы сожгли: %.2f ккал.",
+		"Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n",
 		steps,
 		distance,
 		caloriesBurned,
